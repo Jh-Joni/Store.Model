@@ -18,7 +18,7 @@ namespace StoreModel.API.Test
             
             var nuevo = new Proveedor
             {
-                Nombre = "Proveedor Inicial",
+                Nombre = "uguetelandia S.A.",
                 Telefono = "123456789",
                 Email = "proveedor@demo.com"
             };
@@ -52,9 +52,9 @@ namespace StoreModel.API.Test
             var actualizado = new Proveedor
             {
                 Id = id,
-                Nombre = "Proveedor Actualizado",
-                Telefono = "987654321",
-                Email = "actualizado@demo.com"
+                Nombre = "uguetelandia S.A.",
+                Telefono = "0991234567",
+                Email = "contacto@juguetelandia.com"
             };
 
             content = new StringContent(

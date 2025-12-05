@@ -29,11 +29,11 @@ namespace StoreModel.API.Test
             
             var nuevo = new Producto
             {
-                Nombre = "Producto Inicial",
-                Descripcion = "Descripción inicial",
-                Precio = 12.50,
-                Stock = 5,
-                CategoriaId = 2
+                Nombre = "Bloques de construcción",
+                Descripcion = "Juego de bloques plásticos para niños de 3 a 6 años",
+                Precio = 18.50,
+                Stock = 30,
+                CategoriaId = 5
             };
 
             var content = new StringContent(
@@ -86,12 +86,11 @@ namespace StoreModel.API.Test
             // 2) ACTUALIZAR PRODUCTO
             var actualizado = new Producto
             {
-                Id = id,
-                Nombre = "Producto Actualizado",
-                Descripcion = "Descripción actualizada",
-                Precio = 20.99,
-                Stock = 10,
-                CategoriaId = 2
+                Nombre = "Bloques de construcción",
+                Descripcion = "Juego de bloques plásticos para niños de 3 a 6 años",
+                Precio = 18.50,
+                Stock = 30,
+                CategoriaId = 5
             };
 
             content = new StringContent(

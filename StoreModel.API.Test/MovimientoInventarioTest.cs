@@ -30,7 +30,7 @@ namespace StoreModel.API.Test
             var nuevo = new MovimientoInventario
             {
                 Tipo = "Entrada",
-                Cantidad = 5,
+                Cantidad = 15,
                 Fecha = DateTime.Parse("2025-12-04T15:30:00Z").ToUniversalTime(),  
                 ProductoId = productoId
             };

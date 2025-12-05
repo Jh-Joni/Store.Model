@@ -47,7 +47,7 @@ namespace StoreModel.API.Test
             var actualizada = new Categoria
             {
                 Id = id,
-                Nombre = "Categoría Actualizada"
+                Nombre = "Juguetes"
             };
 
             content = new StringContent(

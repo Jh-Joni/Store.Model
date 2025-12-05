@@ -19,7 +19,7 @@ namespace StoreModel.API.Test
             //  1) CREAR 
             var nuevo = new ProductoProveedor
             {
-                ProductoId = 2,     
+                ProductoId = 4,     
                 ProveedorId = 2     
             };
 
@@ -38,7 +38,7 @@ namespace StoreModel.API.Test
             var actualizar = new ProductoProveedor
             {
                 Id = id,
-                ProductoId = 2,   
+                ProductoId = 4,   // Solo el producto con id 4
                 ProveedorId = 2   
             };
 
@@ -50,11 +50,36 @@ namespace StoreModel.API.Test
 
             Console.WriteLine("ACTUALIZADO correctamente ID: " + id);
 
-            // ========== 3) ELIMINAR ==========
-            var responseDel = http.DeleteAsync($"api/ProductoProveedor/{id}").Result;
-            string respDel = responseDel.Content.ReadAsStringAsync().Result;
+            // ========== 3) OBTENER TODOS LOS PRODUCTOS-PROVEEDOR CON DETALLES ==========
+            var responseAll = http.GetAsync("api/ProductoProveedor").Result;
+            string jsonRespAll = responseAll.Content.ReadAsStringAsync().Result;
+            var apiResultAll = JsonConvert.DeserializeObject<ApiResult<List<ProductoProveedor>>>(jsonRespAll);
 
-            Console.WriteLine("ELIMINADO correctamente ID: " + id);
+            Console.WriteLine("===== DETALLE DE PRODUCTO-PROVEEDOR (ProductoId = 4) =====");
+            if (apiResultAll?.Data != null)
+            {
+                foreach (var pp in apiResultAll.Data)
+                {
+                    if (pp.ProductoId == 4)
+                    {
+                        Console.WriteLine($"ID: {pp.Id}");
+                        Console.WriteLine($"Producto: {pp.Producto?.Nombre}");
+                        Console.WriteLine($"Descripción: {pp.Producto?.Descripcion}");
+                        Console.WriteLine($"Precio: {pp.Producto?.Precio}");
+                        Console.WriteLine($"Stock: {pp.Producto?.Stock}");
+                        Console.WriteLine($"Proveedor: {pp.Proveedor?.Nombre}");
+                        Console.WriteLine($"Teléfono Proveedor: {pp.Proveedor?.Telefono}");
+                        Console.WriteLine($"Email Proveedor: {pp.Proveedor?.Email}");
+                        Console.WriteLine("----------------------------------------");
+                    }
+                }
+            }
+
+            // ========== 4) ELIMINAR ==========
+            //var responseDel = http.DeleteAsync($"api/ProductoProveedor/{id}").Result;
+            //string respDel = responseDel.Content.ReadAsStringAsync().Result;
+
+            //Console.WriteLine("ELIMINADO correctamente ID: " + id);
         }
     }
 }
