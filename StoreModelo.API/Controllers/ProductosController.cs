@@ -24,14 +24,14 @@ namespace StoreModelo.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Producto>>> GetProducto()
         {
-            return await _context.Producto.ToListAsync();
+            return await _context.Productos.ToListAsync();
         }
 
         // GET: api/Productos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Producto>> GetProducto(int id)
         {
-            var producto = await _context.Producto.FindAsync(id);
+            var producto = await _context.Productos.FindAsync(id);
 
             if (producto == null)
             {
@@ -77,7 +77,7 @@ namespace StoreModelo.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Producto>> PostProducto(Producto producto)
         {
-            _context.Producto.Add(producto);
+            _context.Productos.Add(producto);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProducto", new { id = producto.Id }, producto);
@@ -87,13 +87,13 @@ namespace StoreModelo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProducto(int id)
         {
-            var producto = await _context.Producto.FindAsync(id);
+            var producto = await _context.Productos.FindAsync(id);
             if (producto == null)
             {
                 return NotFound();
             }
 
-            _context.Producto.Remove(producto);
+            _context.Productos.Remove(producto);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace StoreModelo.API.Controllers
 
         private bool ProductoExists(int id)
         {
-            return _context.Producto.Any(e => e.Id == id);
+            return _context.Productos.Any(e => e.Id == id);
         }
     }
 }

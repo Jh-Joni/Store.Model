@@ -24,14 +24,14 @@ namespace StoreModelo.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovimientoInventario>>> GetMovimientoInventario()
         {
-            return await _context.MovimientoInventario.ToListAsync();
+            return await _context.MovimientosInventario.ToListAsync();
         }
 
         // GET: api/MovimientosInventario/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MovimientoInventario>> GetMovimientoInventario(int id)
         {
-            var movimientoInventario = await _context.MovimientoInventario.FindAsync(id);
+            var movimientoInventario = await _context.MovimientosInventario.FindAsync(id);
 
             if (movimientoInventario == null)
             {
@@ -77,7 +77,7 @@ namespace StoreModelo.API.Controllers
         [HttpPost]
         public async Task<ActionResult<MovimientoInventario>> PostMovimientoInventario(MovimientoInventario movimientoInventario)
         {
-            _context.MovimientoInventario.Add(movimientoInventario);
+            _context.MovimientosInventario.Add(movimientoInventario);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMovimientoInventario", new { id = movimientoInventario.Id }, movimientoInventario);
@@ -87,13 +87,13 @@ namespace StoreModelo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovimientoInventario(int id)
         {
-            var movimientoInventario = await _context.MovimientoInventario.FindAsync(id);
+            var movimientoInventario = await _context.MovimientosInventario.FindAsync(id);
             if (movimientoInventario == null)
             {
                 return NotFound();
             }
 
-            _context.MovimientoInventario.Remove(movimientoInventario);
+            _context.MovimientosInventario.Remove(movimientoInventario);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace StoreModelo.API.Controllers
 
         private bool MovimientoInventarioExists(int id)
         {
-            return _context.MovimientoInventario.Any(e => e.Id == id);
+            return _context.MovimientosInventario.Any(e => e.Id == id);
         }
     }
 }

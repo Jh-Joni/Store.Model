@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace StoreModelo.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251204153626_v1posgres")]
-    partial class v1posgres
+    [Migration("20251205003454_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace StoreModelo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categoria");
+                    b.ToTable("Categorias");
                 });
 
             modelBuilder.Entity("Store.Model.MovimientoInventario", b =>
@@ -66,7 +66,7 @@ namespace StoreModelo.API.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("MovimientoInventario");
+                    b.ToTable("MovimientosInventario");
                 });
 
             modelBuilder.Entity("Store.Model.Producto", b =>
@@ -87,8 +87,8 @@ namespace StoreModelo.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Precio")
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("ProveedorId")
                         .HasColumnType("integer");
@@ -102,7 +102,7 @@ namespace StoreModelo.API.Migrations
 
                     b.HasIndex("ProveedorId");
 
-                    b.ToTable("Producto");
+                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("Store.Model.ProductoProveedor", b =>
@@ -125,7 +125,7 @@ namespace StoreModelo.API.Migrations
 
                     b.HasIndex("ProveedorId");
 
-                    b.ToTable("ProductoProveedor");
+                    b.ToTable("ProductosProveedor");
                 });
 
             modelBuilder.Entity("Store.Model.Proveedor", b =>
@@ -150,7 +150,7 @@ namespace StoreModelo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Proveedor");
+                    b.ToTable("Proveedores");
                 });
 
             modelBuilder.Entity("Store.Model.MovimientoInventario", b =>

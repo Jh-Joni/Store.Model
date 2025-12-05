@@ -24,14 +24,14 @@ namespace StoreModelo.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Proveedor>>> GetProveedor()
         {
-            return await _context.Proveedor.ToListAsync();
+            return await _context.Proveedores.ToListAsync();
         }
 
         // GET: api/Proveedores/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Proveedor>> GetProveedor(int id)
         {
-            var proveedor = await _context.Proveedor.FindAsync(id);
+            var proveedor = await _context.Proveedores.FindAsync(id);
 
             if (proveedor == null)
             {
@@ -77,7 +77,7 @@ namespace StoreModelo.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Proveedor>> PostProveedor(Proveedor proveedor)
         {
-            _context.Proveedor.Add(proveedor);
+            _context.Proveedores.Add(proveedor);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProveedor", new { id = proveedor.Id }, proveedor);
@@ -87,13 +87,13 @@ namespace StoreModelo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProveedor(int id)
         {
-            var proveedor = await _context.Proveedor.FindAsync(id);
+            var proveedor = await _context.Proveedores.FindAsync(id);
             if (proveedor == null)
             {
                 return NotFound();
             }
 
-            _context.Proveedor.Remove(proveedor);
+            _context.Proveedores.Remove(proveedor);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace StoreModelo.API.Controllers
 
         private bool ProveedorExists(int id)
         {
-            return _context.Proveedor.Any(e => e.Id == id);
+            return _context.Proveedores.Any(e => e.Id == id);
         }
     }
 }

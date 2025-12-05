@@ -24,14 +24,14 @@ namespace StoreModelo.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductoProveedor>>> GetProductoProveedor()
         {
-            return await _context.ProductoProveedor.ToListAsync();
+            return await _context.ProductosProveedor.ToListAsync();
         }
 
         // GET: api/ProductosProveedor/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductoProveedor>> GetProductoProveedor(int id)
         {
-            var productoProveedor = await _context.ProductoProveedor.FindAsync(id);
+            var productoProveedor = await _context.ProductosProveedor.FindAsync(id);
 
             if (productoProveedor == null)
             {
@@ -77,7 +77,7 @@ namespace StoreModelo.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductoProveedor>> PostProductoProveedor(ProductoProveedor productoProveedor)
         {
-            _context.ProductoProveedor.Add(productoProveedor);
+            _context.ProductosProveedor.Add(productoProveedor);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProductoProveedor", new { id = productoProveedor.Id }, productoProveedor);
@@ -87,13 +87,13 @@ namespace StoreModelo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductoProveedor(int id)
         {
-            var productoProveedor = await _context.ProductoProveedor.FindAsync(id);
+            var productoProveedor = await _context.ProductosProveedor.FindAsync(id);
             if (productoProveedor == null)
             {
                 return NotFound();
             }
 
-            _context.ProductoProveedor.Remove(productoProveedor);
+            _context.ProductosProveedor.Remove(productoProveedor);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace StoreModelo.API.Controllers
 
         private bool ProductoProveedorExists(int id)
         {
-            return _context.ProductoProveedor.Any(e => e.Id == id);
+            return _context.ProductosProveedor.Any(e => e.Id == id);
         }
     }
 }

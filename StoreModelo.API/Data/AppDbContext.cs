@@ -12,13 +12,13 @@ using Store.Model;
         {
         }
 
-        public DbSet<Store.Model.Categoria> Categoria { get; set; } = default!;
+        public DbSet<Store.Model.Categoria> Categorias { get; set; } = default!;
 
-public DbSet<Store.Model.MovimientoInventario> MovimientoInventario { get; set; } = default!;
+public DbSet<Store.Model.MovimientoInventario> MovimientosInventario { get; set; } = default!;
 
-public DbSet<Store.Model.Producto> Producto { get; set; } = default!;
+public DbSet<Store.Model.Producto> Productos { get; set; } = default!;
 
-public DbSet<Store.Model.ProductoProveedor> ProductoProveedor { get; set; } = default!;
+public DbSet<Store.Model.ProductoProveedor> ProductosProveedor { get; set; } = default!;
 
-public DbSet<Store.Model.Proveedor> Proveedor { get; set; } = default!;
+public DbSet<Store.Model.Proveedor> Proveedores { get; set; } = default!;
     }

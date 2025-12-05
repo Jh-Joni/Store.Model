@@ -7,13 +7,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace StoreModelo.API.Migrations
 {
     /// <inheritdoc />
-    public partial class v1posgres : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categoria",
+                name: "Categorias",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -22,11 +22,11 @@ namespace StoreModelo.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categoria", x => x.Id);
+                    table.PrimaryKey("PK_Categorias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Proveedor",
+                name: "Proveedores",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -37,40 +37,40 @@ namespace StoreModelo.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Proveedor", x => x.Id);
+                    table.PrimaryKey("PK_Proveedores", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Producto",
+                name: "Productos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nombre = table.Column<string>(type: "text", nullable: false),
                     Descripcion = table.Column<string>(type: "text", nullable: true),
-                    Precio = table.Column<decimal>(type: "numeric", nullable: false),
+                    Precio = table.Column<double>(type: "double precision", nullable: false),
                     Stock = table.Column<int>(type: "integer", nullable: false),
                     CategoriaId = table.Column<int>(type: "integer", nullable: false),
                     ProveedorId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Producto", x => x.Id);
+                    table.PrimaryKey("PK_Productos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Producto_Categoria_CategoriaId",
+                        name: "FK_Productos_Categorias_CategoriaId",
                         column: x => x.CategoriaId,
-                        principalTable: "Categoria",
+                        principalTable: "Categorias",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Producto_Proveedor_ProveedorId",
+                        name: "FK_Productos_Proveedores_ProveedorId",
                         column: x => x.ProveedorId,
-                        principalTable: "Proveedor",
+                        principalTable: "Proveedores",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "MovimientoInventario",
+                name: "MovimientosInventario",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -82,17 +82,17 @@ namespace StoreModelo.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovimientoInventario", x => x.Id);
+                    table.PrimaryKey("PK_MovimientosInventario", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MovimientoInventario_Producto_ProductoId",
+                        name: "FK_MovimientosInventario_Productos_ProductoId",
                         column: x => x.ProductoId,
-                        principalTable: "Producto",
+                        principalTable: "Productos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductoProveedor",
+                name: "ProductosProveedor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -102,44 +102,44 @@ namespace StoreModelo.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductoProveedor", x => x.Id);
+                    table.PrimaryKey("PK_ProductosProveedor", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductoProveedor_Producto_ProductoId",
+                        name: "FK_ProductosProveedor_Productos_ProductoId",
                         column: x => x.ProductoId,
-                        principalTable: "Producto",
+                        principalTable: "Productos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductoProveedor_Proveedor_ProveedorId",
+                        name: "FK_ProductosProveedor_Proveedores_ProveedorId",
                         column: x => x.ProveedorId,
-                        principalTable: "Proveedor",
+                        principalTable: "Proveedores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MovimientoInventario_ProductoId",
-                table: "MovimientoInventario",
+                name: "IX_MovimientosInventario_ProductoId",
+                table: "MovimientosInventario",
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Producto_CategoriaId",
-                table: "Producto",
+                name: "IX_Productos_CategoriaId",
+                table: "Productos",
                 column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Producto_ProveedorId",
-                table: "Producto",
+                name: "IX_Productos_ProveedorId",
+                table: "Productos",
                 column: "ProveedorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductoProveedor_ProductoId",
-                table: "ProductoProveedor",
+                name: "IX_ProductosProveedor_ProductoId",
+                table: "ProductosProveedor",
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductoProveedor_ProveedorId",
-                table: "ProductoProveedor",
+                name: "IX_ProductosProveedor_ProveedorId",
+                table: "ProductosProveedor",
                 column: "ProveedorId");
         }
 
@@ -147,19 +147,19 @@ namespace StoreModelo.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MovimientoInventario");
+                name: "MovimientosInventario");
 
             migrationBuilder.DropTable(
-                name: "ProductoProveedor");
+                name: "ProductosProveedor");
 
             migrationBuilder.DropTable(
-                name: "Producto");
+                name: "Productos");
 
             migrationBuilder.DropTable(
-                name: "Categoria");
+                name: "Categorias");
 
             migrationBuilder.DropTable(
-                name: "Proveedor");
+                name: "Proveedores");
         }
     }
 }
