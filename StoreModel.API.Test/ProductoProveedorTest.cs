@@ -9,7 +9,7 @@ namespace StoreModel.API.Test
     {
         private static readonly HttpClient http = new HttpClient()
         {
-            BaseAddress = new Uri("https://localhost:7167/")
+            BaseAddress = new Uri("https://store-model.onrender.com/api/")
         };
 
         public static void CrearActualizarEliminar()

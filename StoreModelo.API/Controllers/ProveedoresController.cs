@@ -22,33 +22,46 @@ namespace StoreModelo.API.Controllers
 
         // GET: api/Proveedores
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Proveedor>>> GetProveedor()
+        public async Task<ActionResult<ApiResult<List<Proveedor>>>> GetProveedor()
         {
-            return await _context.Proveedores.ToListAsync();
+            try
+            {
+                var proveedores = await _context.Proveedores.ToListAsync();
+                return ApiResult<List<Proveedor>>.Ok(proveedores);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<List<Proveedor>>.Fail(ex.Message);
+            }
         }
 
         // GET: api/Proveedores/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Proveedor>> GetProveedor(int id)
+        public async Task<ActionResult<ApiResult<Proveedor>>> GetProveedor(int id)
         {
-            var proveedor = await _context.Proveedores.FindAsync(id);
-
-            if (proveedor == null)
+            try
             {
-                return NotFound();
+                var proveedor = await _context.Proveedores.FindAsync(id);
+                if (proveedor == null)
+                {
+                    return ApiResult<Proveedor>.Fail("Datos no encontrados");
+                }
+                return ApiResult<Proveedor>.Ok(proveedor);
             }
-
-            return proveedor;
+            catch (Exception ex)
+            {
+                return ApiResult<Proveedor>.Fail(ex.Message);
+            }
         }
 
         // PUT: api/Proveedores/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProveedor(int id, Proveedor proveedor)
+        public async Task<ActionResult<ApiResult<Proveedor>>> PutProveedor(int id, Proveedor proveedor)
         {
             if (id != proveedor.Id)
             {
-                return BadRequest();
+                return ApiResult<Proveedor>.Fail("No coinciden los identificadores");
             }
 
             _context.Entry(proveedor).State = EntityState.Modified;
@@ -57,46 +70,63 @@ namespace StoreModelo.API.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!ProveedorExists(id))
                 {
-                    return NotFound();
+                    return ApiResult<Proveedor>.Fail("Datos no encontrados");
                 }
                 else
                 {
-                    throw;
+                    return ApiResult<Proveedor>.Fail(ex.Message);
                 }
             }
+            catch (Exception ex)
+            {
+                return ApiResult<Proveedor>.Fail(ex.Message);
+            }
 
-            return NoContent();
+            return ApiResult<Proveedor>.Ok(null);
         }
 
         // POST: api/Proveedores
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Proveedor>> PostProveedor(Proveedor proveedor)
+        public async Task<ActionResult<ApiResult<Proveedor>>> PostProveedor(Proveedor proveedor)
         {
-            _context.Proveedores.Add(proveedor);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProveedor", new { id = proveedor.Id }, proveedor);
+            try
+            {
+                _context.Proveedores.Add(proveedor);
+                await _context.SaveChangesAsync();
+                return ApiResult<Proveedor>.Ok(proveedor);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<Proveedor>.Fail(ex.Message);
+            }
         }
 
         // DELETE: api/Proveedores/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProveedor(int id)
+        public async Task<ActionResult<ApiResult<Proveedor>>> DeleteProveedor(int id)
         {
-            var proveedor = await _context.Proveedores.FindAsync(id);
-            if (proveedor == null)
+            try
             {
-                return NotFound();
+                var proveedor = await _context.Proveedores.FindAsync(id);
+                if (proveedor == null)
+                {
+                    return ApiResult<Proveedor>.Fail("Datos no encontrados");
+                }
+
+                _context.Proveedores.Remove(proveedor);
+                await _context.SaveChangesAsync();
+
+                return ApiResult<Proveedor>.Ok(null);
             }
-
-            _context.Proveedores.Remove(proveedor);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return ApiResult<Proveedor>.Fail(ex.Message);
+            }
         }
 
         private bool ProveedorExists(int id)

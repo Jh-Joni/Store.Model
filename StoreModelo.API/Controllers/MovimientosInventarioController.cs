@@ -22,33 +22,46 @@ namespace StoreModelo.API.Controllers
 
         // GET: api/MovimientosInventario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovimientoInventario>>> GetMovimientoInventario()
+        public async Task<ActionResult<ApiResult<List<MovimientoInventario>>>> GetMovimientoInventario()
         {
-            return await _context.MovimientosInventario.ToListAsync();
+            try
+            {
+                var movimientos = await _context.MovimientosInventario.ToListAsync();
+                return ApiResult<List<MovimientoInventario>>.Ok(movimientos);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<List<MovimientoInventario>>.Fail(ex.Message);
+            }
         }
 
         // GET: api/MovimientosInventario/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MovimientoInventario>> GetMovimientoInventario(int id)
+        public async Task<ActionResult<ApiResult<MovimientoInventario>>> GetMovimientoInventario(int id)
         {
-            var movimientoInventario = await _context.MovimientosInventario.FindAsync(id);
-
-            if (movimientoInventario == null)
+            try
             {
-                return NotFound();
+                var movimientoInventario = await _context.MovimientosInventario.FindAsync(id);
+                if (movimientoInventario == null)
+                {
+                    return ApiResult<MovimientoInventario>.Fail("Datos no encontrados");
+                }
+                return ApiResult<MovimientoInventario>.Ok(movimientoInventario);
             }
-
-            return movimientoInventario;
+            catch (Exception ex)
+            {
+                return ApiResult<MovimientoInventario>.Fail(ex.Message);
+            }
         }
 
         // PUT: api/MovimientosInventario/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovimientoInventario(int id, MovimientoInventario movimientoInventario)
+        public async Task<ActionResult<ApiResult<MovimientoInventario>>> PutMovimientoInventario(int id, MovimientoInventario movimientoInventario)
         {
             if (id != movimientoInventario.Id)
             {
-                return BadRequest();
+                return ApiResult<MovimientoInventario>.Fail("No coinciden los identificadores");
             }
 
             _context.Entry(movimientoInventario).State = EntityState.Modified;
@@ -57,46 +70,63 @@ namespace StoreModelo.API.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!MovimientoInventarioExists(id))
                 {
-                    return NotFound();
+                    return ApiResult<MovimientoInventario>.Fail("Datos no encontrados");
                 }
                 else
                 {
-                    throw;
+                    return ApiResult<MovimientoInventario>.Fail(ex.Message);
                 }
             }
+            catch (Exception ex)
+            {
+                return ApiResult<MovimientoInventario>.Fail(ex.Message);
+            }
 
-            return NoContent();
+            return ApiResult<MovimientoInventario>.Ok(null);
         }
 
         // POST: api/MovimientosInventario
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<MovimientoInventario>> PostMovimientoInventario(MovimientoInventario movimientoInventario)
+        public async Task<ActionResult<ApiResult<MovimientoInventario>>> PostMovimientoInventario(MovimientoInventario movimientoInventario)
         {
-            _context.MovimientosInventario.Add(movimientoInventario);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMovimientoInventario", new { id = movimientoInventario.Id }, movimientoInventario);
+            try
+            {
+                _context.MovimientosInventario.Add(movimientoInventario);
+                await _context.SaveChangesAsync();
+                return ApiResult<MovimientoInventario>.Ok(movimientoInventario);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<MovimientoInventario>.Fail(ex.Message);
+            }
         }
 
         // DELETE: api/MovimientosInventario/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovimientoInventario(int id)
+        public async Task<ActionResult<ApiResult<MovimientoInventario>>> DeleteMovimientoInventario(int id)
         {
-            var movimientoInventario = await _context.MovimientosInventario.FindAsync(id);
-            if (movimientoInventario == null)
+            try
             {
-                return NotFound();
+                var movimientoInventario = await _context.MovimientosInventario.FindAsync(id);
+                if (movimientoInventario == null)
+                {
+                    return ApiResult<MovimientoInventario>.Fail("Datos no encontrados");
+                }
+
+                _context.MovimientosInventario.Remove(movimientoInventario);
+                await _context.SaveChangesAsync();
+
+                return ApiResult<MovimientoInventario>.Ok(null);
             }
-
-            _context.MovimientosInventario.Remove(movimientoInventario);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return ApiResult<MovimientoInventario>.Fail(ex.Message);
+            }
         }
 
         private bool MovimientoInventarioExists(int id)

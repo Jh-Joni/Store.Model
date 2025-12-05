@@ -97,6 +97,8 @@ namespace StoreModelo.API.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Activo = table.Column<bool>(type: "boolean", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ProductoId = table.Column<int>(type: "integer", nullable: false),
                     ProveedorId = table.Column<int>(type: "integer", nullable: false)
                 },

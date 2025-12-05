@@ -22,33 +22,46 @@ namespace StoreModelo.API.Controllers
 
         // GET: api/Categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoria()
+        public async Task<ActionResult<ApiResult<List<Categoria>>>> GetCategoria()
         {
-            return await _context.Categorias.ToListAsync();
+            try
+            {
+                var categorias = await _context.Categorias.ToListAsync();
+                return ApiResult<List<Categoria>>.Ok(categorias);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<List<Categoria>>.Fail(ex.Message);
+            }
         }
 
         // GET: api/Categorias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categoria>> GetCategoria(int id)
+        public async Task<ActionResult<ApiResult<Categoria>>> GetCategoria(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-
-            if (categoria == null)
+            try
             {
-                return NotFound();
+                var categoria = await _context.Categorias.FindAsync(id);
+                if (categoria == null)
+                {
+                    return ApiResult<Categoria>.Fail("Datos no encontrados");
+                }
+                return ApiResult<Categoria>.Ok(categoria);
             }
-
-            return categoria;
+            catch (Exception ex)
+            {
+                return ApiResult<Categoria>.Fail(ex.Message);
+            }
         }
 
         // PUT: api/Categorias/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
+        public async Task<ActionResult<ApiResult<Categoria>>> PutCategoria(int id, Categoria categoria)
         {
             if (id != categoria.Id)
             {
-                return BadRequest();
+                return ApiResult<Categoria>.Fail("No coinciden los identificadores");
             }
 
             _context.Entry(categoria).State = EntityState.Modified;
@@ -57,46 +70,63 @@ namespace StoreModelo.API.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!CategoriaExists(id))
                 {
-                    return NotFound();
+                    return ApiResult<Categoria>.Fail("Datos no encontrados");
                 }
                 else
                 {
-                    throw;
+                    return ApiResult<Categoria>.Fail(ex.Message);
                 }
             }
+            catch (Exception ex)
+            {
+                return ApiResult<Categoria>.Fail(ex.Message);
+            }
 
-            return NoContent();
+            return ApiResult<Categoria>.Ok(null);
         }
 
         // POST: api/Categorias
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
+        public async Task<ActionResult<ApiResult<Categoria>>> PostCategoria(Categoria categoria)
         {
-            _context.Categorias.Add(categoria);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCategoria", new { id = categoria.Id }, categoria);
+            try
+            {
+                _context.Categorias.Add(categoria);
+                await _context.SaveChangesAsync();
+                return ApiResult<Categoria>.Ok(categoria);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<Categoria>.Fail(ex.Message);
+            }
         }
 
         // DELETE: api/Categorias/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategoria(int id)
+        public async Task<ActionResult<ApiResult<Categoria>>> DeleteCategoria(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
+            try
             {
-                return NotFound();
+                var categoria = await _context.Categorias.FindAsync(id);
+                if (categoria == null)
+                {
+                    return ApiResult<Categoria>.Fail("Datos no encontrados");
+                }
+
+                _context.Categorias.Remove(categoria);
+                await _context.SaveChangesAsync();
+
+                return ApiResult<Categoria>.Ok(null);
             }
-
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return ApiResult<Categoria>.Fail(ex.Message);
+            }
         }
 
         private bool CategoriaExists(int id)

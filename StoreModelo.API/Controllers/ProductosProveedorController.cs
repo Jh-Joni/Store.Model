@@ -22,33 +22,46 @@ namespace StoreModelo.API.Controllers
 
         // GET: api/ProductosProveedor
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductoProveedor>>> GetProductoProveedor()
+        public async Task<ActionResult<ApiResult<List<ProductoProveedor>>>> GetProductosProveedor()
         {
-            return await _context.ProductosProveedor.ToListAsync();
+            try
+            {
+                var productosProveedor = await _context.ProductosProveedor.ToListAsync();
+                return ApiResult<List<ProductoProveedor>>.Ok(productosProveedor);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<List<ProductoProveedor>>.Fail(ex.Message);
+            }
         }
 
         // GET: api/ProductosProveedor/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductoProveedor>> GetProductoProveedor(int id)
+        public async Task<ActionResult<ApiResult<ProductoProveedor>>> GetProductoProveedor(int id)
         {
-            var productoProveedor = await _context.ProductosProveedor.FindAsync(id);
-
-            if (productoProveedor == null)
+            try
             {
-                return NotFound();
+                var productoProveedor = await _context.ProductosProveedor.FindAsync(id);
+                if (productoProveedor == null)
+                {
+                    return ApiResult<ProductoProveedor>.Fail("Datos no encontrados");
+                }
+                return ApiResult<ProductoProveedor>.Ok(productoProveedor);
             }
-
-            return productoProveedor;
+            catch (Exception ex)
+            {
+                return ApiResult<ProductoProveedor>.Fail(ex.Message);
+            }
         }
 
         // PUT: api/ProductosProveedor/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProductoProveedor(int id, ProductoProveedor productoProveedor)
+        public async Task<ActionResult<ApiResult<ProductoProveedor>>> PutProductoProveedor(int id, ProductoProveedor productoProveedor)
         {
             if (id != productoProveedor.Id)
             {
-                return BadRequest();
+                return ApiResult<ProductoProveedor>.Fail("No coinciden los identificadores");
             }
 
             _context.Entry(productoProveedor).State = EntityState.Modified;
@@ -57,46 +70,63 @@ namespace StoreModelo.API.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!ProductoProveedorExists(id))
                 {
-                    return NotFound();
+                    return ApiResult<ProductoProveedor>.Fail("Datos no encontrados");
                 }
                 else
                 {
-                    throw;
+                    return ApiResult<ProductoProveedor>.Fail(ex.Message);
                 }
             }
+            catch (Exception ex)
+            {
+                return ApiResult<ProductoProveedor>.Fail(ex.Message);
+            }
 
-            return NoContent();
+            return ApiResult<ProductoProveedor>.Ok(null);
         }
 
         // POST: api/ProductosProveedor
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ProductoProveedor>> PostProductoProveedor(ProductoProveedor productoProveedor)
+        public async Task<ActionResult<ApiResult<ProductoProveedor>>> PostProductoProveedor(ProductoProveedor productoProveedor)
         {
-            _context.ProductosProveedor.Add(productoProveedor);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProductoProveedor", new { id = productoProveedor.Id }, productoProveedor);
+            try
+            {
+                _context.ProductosProveedor.Add(productoProveedor);
+                await _context.SaveChangesAsync();
+                return ApiResult<ProductoProveedor>.Ok(productoProveedor);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<ProductoProveedor>.Fail(ex.Message);
+            }
         }
 
         // DELETE: api/ProductosProveedor/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductoProveedor(int id)
+        public async Task<ActionResult<ApiResult<ProductoProveedor>>> DeleteProductoProveedor(int id)
         {
-            var productoProveedor = await _context.ProductosProveedor.FindAsync(id);
-            if (productoProveedor == null)
+            try
             {
-                return NotFound();
+                var productoProveedor = await _context.ProductosProveedor.FindAsync(id);
+                if (productoProveedor == null)
+                {
+                    return ApiResult<ProductoProveedor>.Fail("Datos no encontrados");
+                }
+
+                _context.ProductosProveedor.Remove(productoProveedor);
+                await _context.SaveChangesAsync();
+
+                return ApiResult<ProductoProveedor>.Ok(null);
             }
-
-            _context.ProductosProveedor.Remove(productoProveedor);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return ApiResult<ProductoProveedor>.Fail(ex.Message);
+            }
         }
 
         private bool ProductoProveedorExists(int id)

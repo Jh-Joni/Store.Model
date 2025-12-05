@@ -9,7 +9,7 @@ namespace StoreModel.API.Test
     internal class MovimientoInventarioTest
     {
         private static readonly HttpClient httpClient =
-            new HttpClient { BaseAddress = new Uri("https://localhost:7167/api/") };
+            new HttpClient { BaseAddress = new Uri("https://store-model.onrender.com/api/") };
 
 
         public static async Task CrearActualizarEliminar(int productoId)

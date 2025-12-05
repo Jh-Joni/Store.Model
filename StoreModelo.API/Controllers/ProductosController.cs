@@ -22,33 +22,46 @@ namespace StoreModelo.API.Controllers
 
         // GET: api/Productos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Producto>>> GetProducto()
+        public async Task<ActionResult<ApiResult<List<Producto>>>> GetProducto()
         {
-            return await _context.Productos.ToListAsync();
+            try
+            {
+                var productos = await _context.Productos.ToListAsync();
+                return ApiResult<List<Producto>>.Ok(productos);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<List<Producto>>.Fail(ex.Message);
+            }
         }
 
         // GET: api/Productos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Producto>> GetProducto(int id)
+        public async Task<ActionResult<ApiResult<Producto>>> GetProducto(int id)
         {
-            var producto = await _context.Productos.FindAsync(id);
-
-            if (producto == null)
+            try
             {
-                return NotFound();
+                var producto = await _context.Productos.FindAsync(id);
+                if (producto == null)
+                {
+                    return ApiResult<Producto>.Fail("Datos no encontrados");
+                }
+                return ApiResult<Producto>.Ok(producto);
             }
-
-            return producto;
+            catch (Exception ex)
+            {
+                return ApiResult<Producto>.Fail(ex.Message);
+            }
         }
 
         // PUT: api/Productos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProducto(int id, Producto producto)
+        public async Task<ActionResult<ApiResult<Producto>>> PutProducto(int id, Producto producto)
         {
             if (id != producto.Id)
             {
-                return BadRequest();
+                return ApiResult<Producto>.Fail("No coinciden los identificadores");
             }
 
             _context.Entry(producto).State = EntityState.Modified;
@@ -57,46 +70,63 @@ namespace StoreModelo.API.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!ProductoExists(id))
                 {
-                    return NotFound();
+                    return ApiResult<Producto>.Fail("Datos no encontrados");
                 }
                 else
                 {
-                    throw;
+                    return ApiResult<Producto>.Fail(ex.Message);
                 }
             }
+            catch (Exception ex)
+            {
+                return ApiResult<Producto>.Fail(ex.Message);
+            }
 
-            return NoContent();
+            return ApiResult<Producto>.Ok(null);
         }
 
         // POST: api/Productos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Producto>> PostProducto(Producto producto)
+        public async Task<ActionResult<ApiResult<Producto>>> PostProducto(Producto producto)
         {
-            _context.Productos.Add(producto);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProducto", new { id = producto.Id }, producto);
+            try
+            {
+                _context.Productos.Add(producto);
+                await _context.SaveChangesAsync();
+                return ApiResult<Producto>.Ok(producto);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<Producto>.Fail(ex.Message);
+            }
         }
 
         // DELETE: api/Productos/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProducto(int id)
+        public async Task<ActionResult<ApiResult<Producto>>> DeleteProducto(int id)
         {
-            var producto = await _context.Productos.FindAsync(id);
-            if (producto == null)
+            try
             {
-                return NotFound();
+                var producto = await _context.Productos.FindAsync(id);
+                if (producto == null)
+                {
+                    return ApiResult<Producto>.Fail("Datos no encontrados");
+                }
+
+                _context.Productos.Remove(producto);
+                await _context.SaveChangesAsync();
+
+                return ApiResult<Producto>.Ok(null);
             }
-
-            _context.Productos.Remove(producto);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return ApiResult<Producto>.Fail(ex.Message);
+            }
         }
 
         private bool ProductoExists(int id)

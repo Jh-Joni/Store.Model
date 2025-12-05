@@ -9,7 +9,7 @@ namespace StoreModel.API.Test
     internal class ProductosTest
     {
         private static readonly HttpClient httpClient =
-            new HttpClient { BaseAddress = new Uri("https://localhost:7167/api/") };
+            new HttpClient { BaseAddress = new Uri("https://store-model.onrender.com/api/") };
 
         
         public static async Task CrearActualizarEliminar(int categoriaId = 1)

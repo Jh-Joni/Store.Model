@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace StoreModelo.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251205003454_v1")]
+    [Migration("20251205023838_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -112,6 +112,12 @@ namespace StoreModelo.API.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ProductoId")
                         .HasColumnType("integer");
